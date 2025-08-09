@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.2</version>
+        <version>3.2.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     
@@ -20,7 +20,20 @@
     <properties>
         <!-- Java 17 is the minimum required version for Spring Boot 3 -->
         <java.version>17</java.version>
+        <spring-cloud.version>2023.0.2</spring-cloud.version>
     </properties>
+    
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     
      <dependencies>
                <!-- Add these three dependencies for JWT -->
@@ -127,7 +140,11 @@
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
 
-        
+        <!-- Eureka Client -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     
