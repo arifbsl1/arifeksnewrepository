@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Order List</h2>
+    <button class="btn btn-success" routerLink="/orders/new">Add New Order</button>
+  </div>
+
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Product Name</th>
+        <th>Order Date</th>
+        <th>Total Amount</th>
+        <th>orderCreateDate</th>
+        <th>orderUpdateDate</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of orders">
+        <td>{{ order.id }}</td>
+        <td>{{ order.productName }}</td>
+        <td>{{ order.orderCreateDate | date }}</td>
+        <td>{{ order.price | currency }}</td>
+        <td>{{ order.orderCreateDate | date }}</td>
+        <td>{{ order.orderUpdateDate | date }}</td>
+        <td>
+          <button (click)="editOrder(order.id)" class="btn btn-primary btn-sm">Edit</button>
+          <button (click)="deleteOrder(order.id)" class="btn btn-danger btn-sm ml-2">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,87 @@
+<h2>{{ isEditMode ? 'Edit Inventory' : 'Add Inventory' }}</h2>
+<form [formGroup]="inventoryForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="productname" class="form-label">Product Name</label>
+        <input type="text" id="productname" formControlName="productname" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="productId" class="form-label">Product ID</label>
+        <input type="text" id="productId" formControlName="productId" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="sku" class="form-label">SKU</label>
+        <input type="text" id="sku" formControlName="sku" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <input type="text" id="category" formControlName="category" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="brand" class="form-label">Brand</label>
+        <input type="text" id="brand" formControlName="brand" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="location" class="form-label">Location</label>
+        <input type="text" id="location" formControlName="location" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="batch_number" class="form-label">Batch Number</label>
+        <input type="text" id="batch_number" formControlName="batch_number" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <input type="text" id="status" formControlName="status" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="imageUrl" class="form-label">Image URL</label>
+        <input type="text" id="imageUrl" formControlName="imageUrl" class="form-control">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label for="quantity_available" class="form-label">Quantity Available</label>
+        <input type="number" id="quantity_available" formControlName="quantity_available" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="quantity_reserved" class="form-label">Quantity Reserved</label>
+        <input type="number" id="quantity_reserved" formControlName="quantity_reserved" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="quantityInStock" class="form-label">Quantity In Stock</label>
+        <input type="number" id="quantityInStock" formControlName="quantityInStock" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="reorder_level" class="form-label">Reorder Level</label>
+        <input type="number" id="reorder_level" formControlName="reorder_level" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="cost_price" class="form-label">Cost Price</label>
+        <input type="number" id="cost_price" formControlName="cost_price" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="selling_price" class="form-label">Selling Price</label>
+        <input type="number" id="selling_price" formControlName="selling_price" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="supplier_id" class="form-label">Supplier ID</label>
+        <input type="number" id="supplier_id" formControlName="supplier_id" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="expiry_date" class="form-label">Expiry Date</label>
+        <input type="date" id="expiry_date" formControlName="expiry_date" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="last_stocked_date" class="form-label">Last Stocked Date</label>
+        <input type="date" id="last_stocked_date" formControlName="last_stocked_date" class="form-control">
+      </div>
+      <div class="mb-3">
+        <label for="last_updated" class="form-label">Last Updated</label>
+        <input type="date" id="last_updated" formControlName="last_updated" class="form-control">
+      </div>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-success">{{ isEditMode ? 'Update' : 'Create' }}</button>
+  <a routerLink="/inventory" class="btn btn-secondary ms-2">Cancel</a>
+</form>

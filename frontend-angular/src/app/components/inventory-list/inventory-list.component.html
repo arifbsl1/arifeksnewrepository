@@ -1,0 +1,34 @@
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Inventory List</h2>
+    <button class="btn btn-success" routerLink="/inventory/new">Add New Inventory</button>
+  </div>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Product Name</th>
+      <th>Quantity Available</th>
+      <th>Location</th>
+      <th>Expiry Date</th>
+      <th>Last Stocked</th>
+      <th>Last Updated</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let inventory of inventories">
+      <td>{{ inventory.id }}</td>
+      <td>{{ inventory.productname }}</td>
+      <td>{{ inventory.quantity_available }}</td>
+      <td>{{ inventory.location }}</td>
+      <td>{{ inventory.expiry_date | date }}</td>
+      <td>{{ inventory.last_stocked_date | date }}</td>
+      <td>{{ inventory.last_updated | date }}</td>
+      <td>
+        <a [routerLink]="['/inventory/edit', inventory.id]" class="btn btn-sm btn-info">Edit</a>
+        <button (click)="deleteInventory(inventory.id)" class="btn btn-sm btn-danger ms-2">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>

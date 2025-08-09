@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <h2>{{ isEditMode ? 'Edit Employee' : 'Add Employee' }}</h2>
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+    <!-- Name Field -->
+    <div class="mb-3">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" id="name" class="form-control" formControlName="name">
+      <div *ngIf="employeeForm.get('name')?.invalid && employeeForm.get('name')?.touched" class="text-danger">
+        Name is required.
+      </div>
+    </div>
+
+    <!-- Email Field -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" id="email" class="form-control" formControlName="email">
+      <div *ngIf="employeeForm.get('email')?.invalid && employeeForm.get('email')?.touched" class="text-danger">
+        A valid email is required.
+      </div>
+    </div>
+
+    <!-- Department Field -->
+    <div class="mb-3">
+      <label for="department" class="form-label">Department</label>
+      <input type="text" id="department" class="form-control" formControlName="department">
+       <div *ngIf="employeeForm.get('department')?.invalid && employeeForm.get('department')?.touched" class="text-danger">
+        Department is required.
+      </div>
+    </div>
+
+    <!-- Age and Salary Fields -->
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="age" class="form-label">Age</label>
+        <input type="number" id="age" class="form-control" formControlName="age">
+        <div *ngIf="employeeForm.get('age')?.invalid && employeeForm.get('age')?.touched" class="text-danger">
+          Age must be between 18 and 65.
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="salary" class="form-label">Salary</label>
+        <input type="number" id="salary" class="form-control" formControlName="salary">
+        <div *ngIf="employeeForm.get('salary')?.invalid && employeeForm.get('salary')?.touched" class="text-danger">
+          Salary must be a positive number.
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="employeeForm.invalid">
+      {{ isEditMode ? 'Update' : 'Save' }}
+    </button>
+    <button type="button" class="btn btn-secondary ms-2" routerLink="/employees">Cancel</button>
+  </form>
+</div>

@@ -1,0 +1,69 @@
+
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+    <div class="card text-center">
+      <div class="card-header">
+        <h2>Login</h2>
+      </div>
+      <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+          <!-- Username Field -->
+          <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" id="username" class="form-control" formControlName="username" placeholder="Enter your username">
+            <div *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched" class="text-danger">
+              Username is required.
+            </div>
+          </div>
+
+          <!-- Password Field with Show/Hide Toggle -->
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <div class="input-group">
+              <input [type]="passwordVisible ? 'text' : 'password'" id="password" class="form-control" formControlName="password" placeholder="Enter your password">
+              <span class="input-group-text" (click)="togglePasswordVisibility()" style="cursor: pointer;">
+                <i class="bi" [class]="passwordVisible ? 'bi-eye-slash' : 'bi-eye'"></i>
+              </span>
+            </div>
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger">
+              Password is required.
+            </div>
+          </div>
+
+          <!-- Role Dropdown -->
+          <div class="mb-3">
+            <label for="role" class="form-label">Role</label>
+            <select id="role" class="form-select" formControlName="role">
+              <option *ngFor="let role of roles" [value]="role">{{ role }}</option>
+            </select>
+            <div *ngIf="loginForm.get('role')?.invalid && loginForm.get('role')?.touched" class="text-danger">
+              Please select a role.
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
+          </div>
+         <!-- This block will display the error message when login fails -->
+          <div *ngIf="loginError" class="alert alert-danger mt-3">
+            {{ loginError }}
+          </div>
+        </form>
+        <p class="card-text">Please choose a provider to log in.</p>
+        <div class="d-grid gap-2">
+          <button class="btn btn-danger" (click)="loginWithGoogle()">
+            <i class="bi bi-google"></i> Login with Google
+          </button>
+          <button class="btn btn-secondary" (click)="loginWithGitHub()">
+            <i class="bi bi-github"></i> Login with GitHub
+          </button>
+          <button class="btn btn-primary" (click)="loginWithFacebook()">
+            <i class="bi bi-facebook"></i> Login with Facebook
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
