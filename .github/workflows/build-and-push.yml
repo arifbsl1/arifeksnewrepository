@@ -113,7 +113,7 @@ jobs:
         ECR_REPOSITORY: employee-backend
         IMAGE_TAG: latest
       run: |
-        cd employee-management-system/backend-springboot
+        cd backend-springboot
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
@@ -141,6 +141,6 @@ jobs:
         ECR_REPOSITORY: employee-frontend
         IMAGE_TAG: latest
       run: |
-        cd employee-management-system/frontend-angular
+        cd frontend-angular
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
