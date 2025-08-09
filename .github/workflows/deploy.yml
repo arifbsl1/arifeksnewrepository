@@ -1,0 +1,44 @@
+name: Deploy to EKS
+
+on:
+  workflow_run:
+    workflows: ["Build and Push to ECR"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Deploy to EKS
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Configure kubectl
+      run: |
+        aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+    - name: Update image tags in deployment files
+      run: |
+        ECR_REGISTRY=${{ secrets.ECR_REGISTRY }}
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" orderbackend/deployment.yaml
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" productbackend/deployment.yaml
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" inventorybackend/deployment.yaml
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" employee-management-system/backend-springboot/deployment.yaml
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" employee-management-system/frontend-angular/deployment.yaml
+
+    - name: Deploy to EKS
+      run: |
+        kubectl apply -f orderbackend/deployment.yaml
+        kubectl apply -f productbackend/deployment.yaml
+        kubectl apply -f inventorybackend/deployment.yaml
+        kubectl apply -f employee-management-system/backend-springboot/deployment.yaml
+        kubectl apply -f employee-management-system/frontend-angular/deployment.yaml

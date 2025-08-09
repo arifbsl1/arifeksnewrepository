@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderbackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderbackend
+  template:
+    metadata:
+      labels:
+        app: orderbackend
+    spec:
+      containers:
+      - name: orderbackend
+        image: YOUR_ECR_REPOSITORY/orderbackend:latest
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderbackend
+spec:
+  selector:
+    app: orderbackend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer
