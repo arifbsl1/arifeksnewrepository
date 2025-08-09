@@ -89,8 +89,8 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
-  build-employee-backend:
-    name: Build and Push employee-backend
+  build-backend-springboot:
+    name: Build and Push backend-springboot
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -110,7 +110,7 @@ jobs:
     - name: Build, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: employee-backend
+        ECR_REPOSITORY: backend-springboot
         IMAGE_TAG: latest
       run: |
         cd backend-springboot
