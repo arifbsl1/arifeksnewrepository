@@ -28,17 +28,17 @@ jobs:
           ECR_BASE_URL: ${{ secrets.ECR_BASE_URL }}
         run: |
           docker build -t $ECR_BASE_URL/eurekaserver:latest ./eurekaserver
-          docker build -t $ECR_BASE_URL/backend-springboot:latest ./backend-springboot
-          docker build -t $ECR_BASE_URL/productbackend:latest ./productbackend
-          docker build -t $ECR_BASE_URL/inventorybackend:latest ./inventorybackend
-          docker build -t $ECR_BASE_URL/orderbackend:latest ./orderbackend
-          docker build -t $ECR_BASE_URL/employee-frontend:latest ./frontend-angular
-          docker push $ECR_BASE_URL/eurekaserver:latest
-          docker push $ECR_BASE_URL/backend-springboot:latest
-          docker push $ECR_BASE_URL/productbackend:latest
-          docker push $ECR_BASE_URL/inventorybackend:latest
-          docker push $ECR_BASE_URL/orderbackend:latest
-          docker push $ECR_BASE_URL/employee-frontend:latest
+#          docker build -t $ECR_BASE_URL/backend-springboot:latest ./backend-springboot
+#          docker build -t $ECR_BASE_URL/productbackend:latest ./productbackend
+#          docker build -t $ECR_BASE_URL/inventorybackend:latest ./inventorybackend
+#          docker build -t $ECR_BASE_URL/orderbackend:latest ./orderbackend
+#          docker build -t $ECR_BASE_URL/employee-frontend:latest ./frontend-angular
+#          docker push $ECR_BASE_URL/eurekaserver:latest
+#          docker push $ECR_BASE_URL/backend-springboot:latest
+#          docker push $ECR_BASE_URL/productbackend:latest
+#          docker push $ECR_BASE_URL/inventorybackend:latest
+#          docker push $ECR_BASE_URL/orderbackend:latest
+#          docker push $ECR_BASE_URL/employee-frontend:latest
 
       - name: Deploy CloudFormation Stack
         run: |
