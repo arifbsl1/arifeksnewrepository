@@ -60,4 +60,3 @@ jobs:
           aws ecs update-service --cluster my-ecs-cluster --service orderbackend-service --force-new-deployment
           aws ecs update-service --cluster my-ecs-cluster --service employee-frontend-service --force-new-deployment
 
-
