@@ -14,13 +14,6 @@ Parameters:
     Type: String
   ClusterName:
     Type: String
-    Defau  FrontendTargetGroup:
-    Type: AWS::ElasticLoadBalancingV2::TargetGroup
-    Properties:
-      Name: frontend-angular-tg
-      VpcId: !Ref VpcId
-      Protocol: HTTP
-      Port: 80ecs-cluster
   EcrBaseUrl:
     Type: String
   AccountId:
