@@ -36,8 +36,8 @@ jobs:
         sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" ../../orderbackend/deployment.yaml
         sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" ../../productbackend/deployment.yaml
         sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" ../../inventorybackend/deployment.yaml
-        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" backend-springboot/deployment.yaml
-        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" frontend-angular/deployment.yaml
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" ../../backend-springboot/deployment.yaml
+        sed -i "s|YOUR_ECR_REPOSITORY|$ECR_REGISTRY|g" ../../frontend-angular/deployment.yaml
 
     - name: Deploy to EKS
       run: |
