@@ -43,7 +43,7 @@ jobs:
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-            --template-file ./deploy-services_ecr.yml \
+            --template-file deploy-services_ecr.yml \
             --stack-name employee-management-services \
             --capabilities CAPABILITY_IAM \
             --parameter-overrides \
