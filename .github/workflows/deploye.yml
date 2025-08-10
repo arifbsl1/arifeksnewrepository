@@ -43,7 +43,7 @@ jobs:
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-            --template-file ./deploye.yml \
+            --template-file ./deploy-services_ecr.yml \
             --stack-name employee-management-services \
             --capabilities CAPABILITY_IAM \
             --parameter-overrides \
@@ -52,5 +52,6 @@ jobs:
               PublicSubnet2=${{ secrets.PUBLIC_SUBNET_2 }} \
               AlbListenerArn=${{ secrets.ALB_LISTENER_ARN }} \
               EcsServiceSecurityGroup=${{ secrets.ECS_SERVICE_SECURITY_GROUP }} \
+              ClusterName=${{ secrets.CLUSTER_NAME }} \
               EcrBaseUrl=${{ secrets.ECR_BASE_URL }} \
               AccountId=${{ secrets.AWS_ACCOUNT_ID }}

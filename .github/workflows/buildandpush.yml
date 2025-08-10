@@ -40,7 +40,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: eurekaserver-tg
-      VpcId: !Ref VpcId
+      VpcId: !Ref VPC_ID
       Protocol: HTTP
       Port: 8761
       HealthCheckPath: /
@@ -80,7 +80,7 @@ Resources:
       RequiresCompatibilities: [FARGATE]
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ExecutionRoleArn: !Sub "arn:aws:iam::${ACCOUNTID}:role/ecsTaskExecutionRole"
       ContainerDefinitions:
         - Name: backend-springboot
           Image: !Sub "${ECR_BASE_URL}/backend-springboot:latest"
@@ -91,7 +91,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: backend-springboot-tg
-      VpcId: !Ref VpcId
+      VpcId: !Ref VPC_ID
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -134,7 +134,7 @@ Resources:
       RequiresCompatibilities: [FARGATE]
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ExecutionRoleArn: !Sub "arn:aws:iam::${ACCOUNTID}:role/ecsTaskExecutionRole"
       ContainerDefinitions:
         - Name: productbackend
           Image: !Sub "${ECR_BASE_URL}/productbackend:latest"
@@ -145,7 +145,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: productbackend-tg
-      VpcId: !Ref VpcId
+      VpcId: !Ref VPC_ID
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -188,7 +188,7 @@ Resources:
       RequiresCompatibilities: [FARGATE]
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ExecutionRoleArn: !Sub "arn:aws:iam::${ACCOUNTID}:role/ecsTaskExecutionRole"
       ContainerDefinitions:
         - Name: inventorybackend
           Image: !Sub "${ECR_BASE_URL}/inventorybackend:latest"
@@ -199,7 +199,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: inventorybackend-tg
-      VpcId: !Ref VpcId
+      VpcId: !Ref VPC_ID
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -242,7 +242,7 @@ Resources:
       RequiresCompatibilities: [FARGATE]
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ExecutionRoleArn: !Sub "arn:aws:iam::${ACCOUNTID}:role/ecsTaskExecutionRole"
       ContainerDefinitions:
         - Name: orderbackend
           Image: !Sub "${ECR_BASE_URL}/orderbackend:latest"
@@ -253,7 +253,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: orderbackend-tg
-      VpcId: !Ref VpcId
+      VpcId: !Ref VPC_ID
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -296,7 +296,7 @@ Resources:
       RequiresCompatibilities: [FARGATE]
       Cpu: 256
       Memory: 512
-      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ExecutionRoleArn: !Sub "arn:aws:iam::${ACCOUNTID}:role/ecsTaskExecutionRole"
       ContainerDefinitions:
         - Name: frontend-angular
           Image: !Sub "${ECR_BASE_URL}/employee-frontend:latest"
@@ -306,7 +306,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: frontend-angular-tg
-      VpcId: !Ref VpcId
+      VpcId: !Ref VPC_ID
       Protocol: HTTP
       Port: 80
       HealthCheckPath: /

@@ -1,0 +1,338 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Deploy services to ECS'
+
+Parameters:
+  VpcId:
+    Type: String
+  PublicSubnet1:
+    Type: String
+  PublicSubnet2:
+    Type: String
+  AlbListenerArn:
+    Type: String
+  EcsServiceSecurityGroup:
+    Type: String
+  ClusterName:
+    Type: String
+    Default: my-ecs-cluster
+  EcrBaseUrl:
+    Type: String
+  AccountId:
+    Type: String
+
+Resources:
+  # --- Eureka Server ---
+  EurekaTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: eurekaserver-task
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ContainerDefinitions:
+        - Name: eurekaserver
+          Image: !Sub "${EcrBaseUrl}/eurekaserver:latest"
+          PortMappings: [{ ContainerPort: 8761 }]
+
+  EurekaTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: eurekaserver-tg
+      VpcId: !Ref VPC_ID
+      Protocol: HTTP
+      Port: 8761
+      HealthCheckPath: /
+      TargetType: ip
+
+  EurekaListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref AlbListenerArn
+      Priority: 1
+      Actions: [{ Type: forward, TargetGroupArn: !Ref EurekaTargetGroup }]
+      Conditions: [{ Field: path-pattern, Values: [/eureka/*] }]
+
+  EurekaService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: eurekaserver-service
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref EurekaTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref EcsServiceSecurityGroup]
+      LoadBalancers:
+        - TargetGroupArn: !Ref EurekaTargetGroup
+          ContainerName: eurekaserver
+          ContainerPort: 8761
+
+  # --- Backend Spring Boot ---
+  BackendTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: backend-springboot-task
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ContainerDefinitions:
+        - Name: backend-springboot
+          Image: !Sub "${EcrBaseUrl}/backend-springboot:latest"
+          PortMappings: [{ ContainerPort: 8080 }]
+          Environment: [{ Name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE, Value: "http://eurekaserver-service.local:8761/eureka" }]
+
+  BackendTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: backend-springboot-tg
+      VpcId: !Ref VPC_ID
+      Protocol: HTTP
+      Port: 8080
+      HealthCheckPath: /actuator/health
+      TargetType: ip
+
+  BackendListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref AlbListenerArn
+      Priority: 2
+      Actions: [{ Type: forward, TargetGroupArn: !Ref BackendTargetGroup }]
+      Conditions: [{ Field: path-pattern, Values: [/api/employees/*] }]
+
+  BackendService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: backend-springboot-service
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref BackendTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref EcsServiceSecurityGroup]
+      LoadBalancers:
+        - TargetGroupArn: !Ref BackendTargetGroup
+          ContainerName: backend-springboot
+          ContainerPort: 8080
+      ServiceConnectConfiguration:
+        Enabled: true
+        Namespace: !Ref ClusterName
+
+  # --- Product Backend ---
+  ProductTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: productbackend-task
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ContainerDefinitions:
+        - Name: productbackend
+          Image: !Sub "${EcrBaseUrl}/productbackend:latest"
+          PortMappings: [{ ContainerPort: 8080 }]
+          Environment: [{ Name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE, Value: "http://eurekaserver-service.local:8761/eureka" }]
+
+  ProductTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: productbackend-tg
+      VpcId: !Ref VPC_ID
+      Protocol: HTTP
+      Port: 8080
+      HealthCheckPath: /actuator/health
+      TargetType: ip
+
+  ProductListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref AlbListenerArn
+      Priority: 3
+      Actions: [{ Type: forward, TargetGroupArn: !Ref ProductTargetGroup }]
+      Conditions: [{ Field: path-pattern, Values: [/api/products/*] }]
+
+  ProductService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: productbackend-service
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref ProductTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref EcsServiceSecurityGroup]
+      LoadBalancers:
+        - TargetGroupArn: !Ref ProductTargetGroup
+          ContainerName: productbackend
+          ContainerPort: 8080
+      ServiceConnectConfiguration:
+        Enabled: true
+        Namespace: !Ref ClusterName
+
+  # --- Inventory Backend ---
+  InventoryTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: inventorybackend-task
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ContainerDefinitions:
+        - Name: inventorybackend
+          Image: !Sub "${EcrBaseUrl}/inventorybackend:latest"
+          PortMappings: [{ ContainerPort: 8080 }]
+          Environment: [{ Name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE, Value: "http://eurekaserver-service.local:8761/eureka" }]
+
+  InventoryTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: inventorybackend-tg
+      VpcId: !Ref VPC_ID
+      Protocol: HTTP
+      Port: 8080
+      HealthCheckPath: /actuator/health
+      TargetType: ip
+
+  InventoryListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref AlbListenerArn
+      Priority: 4
+      Actions: [{ Type: forward, TargetGroupArn: !Ref InventoryTargetGroup }]
+      Conditions: [{ Field: path-pattern, Values: [/api/inventory/*] }]
+
+  InventoryService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: inventorybackend-service
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref InventoryTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref EcsServiceSecurityGroup]
+      LoadBalancers:
+        - TargetGroupArn: !Ref InventoryTargetGroup
+          ContainerName: inventorybackend
+          ContainerPort: 8080
+      ServiceConnectConfiguration:
+        Enabled: true
+        Namespace: !Ref ClusterName
+
+  # --- Order Backend ---
+  OrderTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: orderbackend-task
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ContainerDefinitions:
+        - Name: orderbackend
+          Image: !Sub "${EcrBaseUrl}/orderbackend:latest"
+          PortMappings: [{ ContainerPort: 8080 }]
+          Environment: [{ Name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE, Value: "http://eurekaserver-service.local:8761/eureka" }]
+
+  OrderTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: orderbackend-tg
+      VpcId: !Ref VPC_ID
+      Protocol: HTTP
+      Port: 8080
+      HealthCheckPath: /actuator/health
+      TargetType: ip
+
+  OrderListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref AlbListenerArn
+      Priority: 5
+      Actions: [{ Type: forward, TargetGroupArn: !Ref OrderTargetGroup }]
+      Conditions: [{ Field: path-pattern, Values: [/api/orders/*] }]
+
+  OrderService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: orderbackend-service
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref OrderTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref EcsServiceSecurityGroup]
+      LoadBalancers:
+        - TargetGroupArn: !Ref OrderTargetGroup
+          ContainerName: orderbackend
+          ContainerPort: 8080
+      ServiceConnectConfiguration:
+        Enabled: true
+        Namespace: !Ref ClusterName
+
+  # --- Frontend Angular ---
+  FrontendTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: frontend-angular-task
+      NetworkMode: awsvpc
+      RequiresCompatibilities: [FARGATE]
+      Cpu: 256
+      Memory: 512
+      ExecutionRoleArn: !Sub "arn:aws:iam::${AccountId}:role/ecsTaskExecutionRole"
+      ContainerDefinitions:
+        - Name: frontend-angular
+          Image: !Sub "${EcrBaseUrl}/employee-frontend:latest"
+          PortMappings: [{ ContainerPort: 80 }]
+
+  FrontendTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: frontend-angular-tg
+      VpcId: !Ref VPC_ID
+      Protocol: HTTP
+      Port: 80
+      HealthCheckPath: /
+      TargetType: ip
+
+  FrontendListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref AlbListenerArn
+      Priority: 10
+      Actions: [{ Type: forward, TargetGroupArn: !Ref FrontendTargetGroup }]
+      Conditions: [{ Field: path-pattern, Values: [/*] }]
+
+  FrontendService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: frontend-angular-service
+      Cluster: !Ref ClusterName
+      TaskDefinition: !Ref FrontendTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          Subnets: [!Ref PublicSubnet1, !Ref PublicSubnet2]
+          SecurityGroups: [!Ref EcsServiceSecurityGroup]
+      LoadBalancers:
+        - TargetGroupArn: !Ref FrontendTargetGroup
+          ContainerName: frontend-angular
+          ContainerPort: 80
