@@ -14,8 +14,8 @@
     <groupId>com.example</groupId>
     <artifactId>employee-management-system</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>employee-management-system</name>
-    <description>Employee Management System Backend</description>
+    <name>backend-springboot</name>
+    <description>backend-springboot</description>
     
     <properties>
         <!-- Java 17 is the minimum required version for Spring Boot 3 -->
