@@ -38,18 +38,18 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/eurekaserver:latest ./eurekaserver
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/backend-springboot:latest ./backend-springboot
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/productbackend:latest ./productbackend
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/inventorybackend:latest ./inventorybackend
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/orderbackend:latest ./orderbackend
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/employee-frontend:latest ./employee-frontend
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/eurekaserver:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/backend-springboot:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/productbackend:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/inventorybackend:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/orderbackend:latest
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY/employee-frontend:latest
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/eurekaserver:latest ./eurekaserver
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/backend-springboot:latest ./backend-springboot
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/productbackend:latest ./productbackend
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/inventorybackend:latest ./inventorybackend
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/orderbackend:latest ./orderbackend
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/employee-frontend:latest ./employee-frontend
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/eurekaserver:latest
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/backend-springboot:latest
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/productbackend:latest
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/inventorybackend:latest
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/orderbackend:latest
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/employee-frontend:latest
 
       - name: Deploy to ECS using AWS CLI
         run: |
