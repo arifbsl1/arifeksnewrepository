@@ -43,13 +43,13 @@ jobs:
           docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/productbackend:latest ./productbackend
           docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/inventorybackend:latest ./inventorybackend
           docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/orderbackend:latest ./orderbackend
-          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/employee-frontend:latest ./employee-frontend
+          docker build -t 506807812764.dkr.ecr.us-east-1.amazonaws.com/frontend-angular:latest ./frontend-angular
           docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/eurekaserver:latest
           docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/backend-springboot:latest
           docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/productbackend:latest
           docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/inventorybackend:latest
           docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/orderbackend:latest
-          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/employee-frontend:latest
+          docker push 506807812764.dkr.ecr.us-east-1.amazonaws.com/frontend-angular:latest
 
       - name: Deploy to ECS using AWS CLI
         run: |
@@ -58,4 +58,4 @@ jobs:
           aws ecs update-service --cluster my-ecs-cluster --service productbackend-service --force-new-deployment
           aws ecs update-service --cluster my-ecs-cluster --service inventorybackend-service --force-new-deployment
           aws ecs update-service --cluster my-ecs-cluster --service orderbackend-service --force-new-deployment
-          aws ecs update-service --cluster my-ecs-cluster --service employee-frontend-service --force-new-deployment
+          aws ecs update-service --cluster my-ecs-cluster --service frontend-angular-service --force-new-deployment
