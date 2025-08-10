@@ -14,7 +14,13 @@ Parameters:
     Type: String
   ClusterName:
     Type: String
-    Default: my-ecs-cluster
+    Defau  FrontendTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: frontend-angular-tg
+      VpcId: !Ref VpcId
+      Protocol: HTTP
+      Port: 80ecs-cluster
   EcrBaseUrl:
     Type: String
   AccountId:
@@ -40,7 +46,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: eurekaserver-tg
-      VpcId: !Ref VPC_ID
+      VpcId: !Ref VpcId
       Protocol: HTTP
       Port: 8761
       HealthCheckPath: /
@@ -91,7 +97,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: backend-springboot-tg
-      VpcId: !Ref VPC_ID
+      VpcId: !Ref VpcId
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -145,7 +151,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: productbackend-tg
-      VpcId: !Ref VPC_ID
+      VpcId: !Ref VpcId
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -199,7 +205,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: inventorybackend-tg
-      VpcId: !Ref VPC_ID
+      VpcId: !Ref VpcId
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -253,7 +259,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: orderbackend-tg
-      VpcId: !Ref VPC_ID
+      VpcId: !Ref VpcId
       Protocol: HTTP
       Port: 8080
       HealthCheckPath: /actuator/health
@@ -306,7 +312,7 @@ Resources:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
     Properties:
       Name: frontend-angular-tg
-      VpcId: !Ref VPC_ID
+      VpcId: !Ref VpcId
       Protocol: HTTP
       Port: 80
       HealthCheckPath: /
