@@ -38,18 +38,18 @@ jobs:
 
       - name: Build and push Docker images
         run: |
-          docker build -t ${{ secrets.ECR_BASE_URL }}/eurekaserver:latest ./eurekaserver
-          docker build -t ${{ secrets.ECR_BASE_URL }}/backend-springboot:latest ./backend-springboot
-          docker build -t ${{ secrets.ECR_BASE_URL }}/productbackend:latest ./productbackend
-          docker build -t ${{ secrets.ECR_BASE_URL }}/inventorybackend:latest ./inventorybackend
-          docker build -t ${{ secrets.ECR_BASE_URL }}/orderbackend:latest ./orderbackend
-          docker build -t ${{ secrets.ECR_BASE_URL }}/employee-frontend:latest ./employee-frontend
-          docker push ${{ secrets.ECR_BASE_URL }}/eurekaserver:latest
-          docker push ${{ secrets.ECR_BASE_URL }}/backend-springboot:latest
-          docker push ${{ secrets.ECR_BASE_URL }}/productbackend:latest
-          docker push ${{ secrets.ECR_BASE_URL }}/inventorybackend:latest
-          docker push ${{ secrets.ECR_BASE_URL }}/orderbackend:latest
-          docker push ${{ secrets.ECR_BASE_URL }}/employee-frontend:latest
+          docker build -t ${{ secrets.YOUR_ECR_REPOSITORY }}/eurekaserver:latest ./eurekaserver
+          docker build -t ${{ secrets.YOUR_ECR_REPOSITORY }}/backend-springboot:latest ./backend-springboot
+          docker build -t ${{ secrets.YOUR_ECR_REPOSITORY }}/productbackend:latest ./productbackend
+          docker build -t ${{ secrets.YOUR_ECR_REPOSITORY }}/inventorybackend:latest ./inventorybackend
+          docker build -t ${{ secrets.YOUR_ECR_REPOSITORY }}/orderbackend:latest ./orderbackend
+          docker build -t ${{ secrets.YOUR_ECR_REPOSITORY }}/employee-frontend:latest ./employee-frontend
+          docker push ${{ secrets.YOUR_ECR_REPOSITORY }}/eurekaserver:latest
+          docker push ${{ secrets.YOUR_ECR_REPOSITORY }}/backend-springboot:latest
+          docker push ${{ secrets.YOUR_ECR_REPOSITORY }}/productbackend:latest
+          docker push ${{ secrets.YOUR_ECR_REPOSITORY }}/inventorybackend:latest
+          docker push ${{ secrets.YOUR_ECR_REPOSITORY }}/orderbackend:latest
+          docker push ${{ secrets.YOUR_ECR_REPOSITORY }}/employee-frontend:latest
 
       - name: Deploy to ECS using AWS CLI
         run: |
